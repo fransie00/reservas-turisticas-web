@@ -7,6 +7,7 @@ import type { AuthResponse } from "@/lib/types";
 
 export interface FormState {
   errors?: string[];
+  message?: string;
   values?: Record<string, string>;
 }
 

@@ -10,7 +10,7 @@ export default function ClienteDashboardPage() {
         rol="cliente"
         descripcion="Encuentra experiencias turísticas y gestiona tus reservas."
         secciones={[
-          { titulo: "Explorar experiencias", descripcion: "Empresas verificadas, servicios y horarios disponibles." },
+          { titulo: "Empresas turísticas", descripcion: "Conoce las empresas verificadas de la plataforma.", href: "/dashboard/cliente/empresas" },
           { titulo: "Mis reservas", descripcion: "Historial y estado: pendiente, aceptada, rechazada o cancelada." },
           { titulo: "Notificaciones", descripcion: "Avisos cuando una empresa responde a tu solicitud." },
           { titulo: "Mi perfil", descripcion: "Revisa los datos de tu cuenta.", href: "/perfil" },
