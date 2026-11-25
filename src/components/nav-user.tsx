@@ -18,7 +18,7 @@ export async function NavUser() {
 
   return (
     <div className="flex items-center gap-4 text-sm">
-      <Link href="/perfil" className="font-medium hover:underline">{user.nombre_completo}</Link>
+      <Link href="/dashboard" className="font-medium hover:underline">{user.nombre_completo}</Link>
       <form action={logout}>
         <button type="submit" className="text-zinc-600 hover:underline dark:text-zinc-400">
           Cerrar sesión

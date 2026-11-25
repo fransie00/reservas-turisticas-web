@@ -31,7 +31,7 @@ export async function login(
   if (!res.ok) return { errors: res.messages, values: { email } };
 
   await createSession(res.data.access_token);
-  redirect("/perfil");
+  redirect("/dashboard");
 }
 
 export async function register(
@@ -63,7 +63,7 @@ export async function register(
   if (!res.ok) return { errors: res.messages, values };
 
   await createSession(res.data.access_token);
-  redirect("/perfil");
+  redirect("/dashboard");
 }
 
 export async function logout(): Promise<void> {

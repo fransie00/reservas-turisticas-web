@@ -9,15 +9,16 @@ export function proxy(request: NextRequest) {
   const tieneSesion = request.cookies.has(SESSION_COOKIE);
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/perfil") && !tieneSesion) {
+  const protegida = pathname.startsWith("/perfil") || pathname.startsWith("/dashboard");
+  if (protegida && !tieneSesion) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if ((pathname === "/login" || pathname === "/registro") && tieneSesion) {
-    return NextResponse.redirect(new URL("/perfil", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/perfil/:path*", "/login", "/registro"],
+  matcher: ["/perfil/:path*", "/dashboard/:path*", "/login", "/registro"],
 };
