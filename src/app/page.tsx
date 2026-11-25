@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { EmpresasDestacadas } from "@/components/landing-destacadas";
@@ -41,17 +42,32 @@ const beneficios = [
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-orange-100 to-cafe-50 dark:from-cafe-900 dark:to-cafe-950">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-20 text-center sm:py-28">
-          <span className="rounded-full border border-orange-200 bg-white px-3 py-1 text-xs font-medium text-accent-soft-fg dark:border-cafe-700 dark:bg-cafe-900 dark:text-orange-300">
+      {/* Hero: foto de fondo con capas oscuras para que el texto siempre se lea */}
+      <section className="relative isolate overflow-hidden">
+        <Image
+          src="/images/san-antonio.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover object-[50%_60%]"
+        />
+        {/* Capa base (60 %) y refuerzo radial en el centro, donde va el texto */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-cafe-950/60" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgb(29_19_10/0.4),transparent_70%)]"
+        />
+
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center text-white sm:py-36">
+          <span className="rounded-full border border-white/30 bg-black/25 px-3 py-1 text-xs font-medium text-white backdrop-blur">
             MVP en desarrollo
           </span>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
+          <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight [text-shadow:0_2px_16px_rgb(0_0_0/0.4)] sm:text-6xl">
             Reserva experiencias turísticas{" "}
-            <span className="text-accent">sin vueltas</span>
+            <span className="text-orange-300">sin vueltas</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-cafe-600 dark:text-cafe-400">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-cafe-100 [text-shadow:0_1px_8px_rgb(0_0_0/0.4)]">
             Conectamos a turistas con empresas verificadas para agendar actividades
             y cupos en los mejores lugares, y damos a las empresas una forma simple
             de gestionar su oferta y sus reservas.
@@ -65,7 +81,7 @@ export default function Home() {
             </Link>
             <a
               href="#como-funciona"
-              className="rounded-lg border border-cafe-300 px-6 py-3 text-sm font-semibold transition-colors hover:border-primary hover:text-accent dark:border-cafe-700"
+              className="rounded-lg border border-white/70 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white/15"
             >
               Cómo funciona
             </a>
@@ -146,7 +162,19 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-cafe-200 px-6 py-8 text-center text-sm text-cafe-500 dark:border-cafe-800">
-        Explora · Proyecto MVP
+        <p>Explora · Proyecto MVP</p>
+        <p className="mt-1 text-xs">
+          Foto de portada: playa Los Corsarios, La Puntilla, San Antonio (Chile), por Mario López,{" "}
+          <a
+            href="https://commons.wikimedia.org/wiki/File:La_playa_Los_Corsarios_(La_Puntilla,_San_Antonio,_Chile)_000_2679.jpg"
+            className="underline hover:text-accent"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            dominio público, Wikimedia Commons
+          </a>
+          .
+        </p>
       </footer>
     </>
   );
