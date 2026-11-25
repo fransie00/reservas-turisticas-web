@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Logo } from "@/components/logo";
 import { NavUser } from "@/components/nav-user";
 import "./globals.css";
 
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reservas Turísticas",
-  description: "Encuentra y reserva tu próxima experiencia turística",
+  title: { default: "Explora · Reservas turísticas", template: "%s · Explora" },
+  description: "Explora conecta turistas con empresas turísticas verificadas para reservar experiencias.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -27,8 +28,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-3 dark:border-zinc-800">
-          <Link href="/" className="font-bold">Reservas Turísticas</Link>
+        <header className="flex items-center justify-between border-b border-cafe-200 px-6 py-3 dark:border-cafe-800">
+          <Link href="/" aria-label="Explora, ir al inicio"><Logo /></Link>
           <Suspense fallback={<div className="h-6 w-40" />}>
             <NavUser />
           </Suspense>

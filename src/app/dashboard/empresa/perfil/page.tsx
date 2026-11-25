@@ -5,7 +5,7 @@ import { DashboardCargando } from "@/components/role-dashboard";
 import { verifyRole } from "@/lib/dal";
 import { obtenerMiEmpresa } from "@/lib/empresas";
 
-export const metadata = { title: "Perfil de la empresa · Reservas Turísticas" };
+export const metadata = { title: "Perfil de la empresa" };
 
 export default function PerfilEmpresaPage() {
   return (
@@ -22,7 +22,7 @@ async function PerfilEmpresa() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link href="/dashboard/empresa" className="text-sm text-blue-600 hover:underline">
+        <Link href="/dashboard/empresa" className="text-sm text-accent hover:underline">
           ← Volver al panel
         </Link>
         <h1 className="mt-2 text-2xl font-bold">Perfil de la empresa</h1>
@@ -43,7 +43,7 @@ async function PerfilEmpresa() {
               </p>
             )
           ) : (
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-cafe-600 dark:text-cafe-400">
               Completa los datos de tu empresa. Un administrador la verificará para que aparezca en el catálogo.
             </p>
           )}

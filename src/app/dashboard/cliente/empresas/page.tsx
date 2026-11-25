@@ -4,7 +4,7 @@ import { DashboardCargando } from "@/components/role-dashboard";
 import { verifyRole } from "@/lib/dal";
 import { listarEmpresasVerificadas } from "@/lib/empresas";
 
-export const metadata = { title: "Empresas turísticas · Reservas Turísticas" };
+export const metadata = { title: "Empresas turísticas" };
 
 export default function EmpresasClientePage() {
   return (
@@ -21,11 +21,11 @@ async function ListadoEmpresas() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link href="/dashboard/cliente" className="text-sm text-blue-600 hover:underline">
+        <Link href="/dashboard/cliente" className="text-sm text-accent hover:underline">
           ← Volver al panel
         </Link>
         <h1 className="mt-2 text-2xl font-bold">Empresas turísticas</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Empresas verificadas disponibles en la plataforma.</p>
+        <p className="text-cafe-600 dark:text-cafe-400">Empresas verificadas disponibles en la plataforma.</p>
       </div>
 
       {!res.ok ? (
@@ -33,24 +33,24 @@ async function ListadoEmpresas() {
           No se pudo cargar el listado: {res.error}
         </p>
       ) : res.data.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-zinc-300 p-8 text-center text-zinc-500 dark:border-zinc-700">
+        <p className="rounded-lg border border-dashed border-cafe-300 p-8 text-center text-cafe-500 dark:border-cafe-700">
           Aún no hay empresas verificadas. Vuelve pronto.
         </p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2">
           {res.data.map((e) => (
-            <li key={e.id} className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <li key={e.id} className="rounded-lg border border-cafe-200 p-4 dark:border-cafe-800">
               <div className="flex items-start justify-between gap-2">
                 <h2 className="font-semibold">{e.nombre_comercial}</h2>
-                <span className="shrink-0 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                <span className="shrink-0 rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent-soft-fg">
                   {e.categoria}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-cafe-500">
                 {[e.direccion, e.ciudad].filter(Boolean).join(", ")}
               </p>
               {e.descripcion && (
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{e.descripcion}</p>
+                <p className="mt-2 text-sm text-cafe-600 dark:text-cafe-400">{e.descripcion}</p>
               )}
             </li>
           ))}

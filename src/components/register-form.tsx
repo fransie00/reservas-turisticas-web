@@ -21,7 +21,7 @@ export function RegisterForm() {
           id="rol"
           name="rol"
           defaultValue={v?.rol ?? "cliente"}
-          className="rounded-md border border-zinc-300 bg-transparent px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-md border border-cafe-300 bg-transparent px-3 py-2 text-sm dark:border-cafe-700 dark:bg-cafe-900"
         >
           <option value="cliente">Cliente (turista)</option>
           <option value="empresa">Empresa turística</option>

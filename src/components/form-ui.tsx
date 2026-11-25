@@ -13,7 +13,7 @@ export function Field({
       <input
         id={id}
         name={id}
-        className="rounded-md border border-zinc-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700"
+        className="rounded-md border border-cafe-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:border-cafe-700"
         {...props}
       />
     </div>
@@ -45,7 +45,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+      className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
     >
       {pending ? "Enviando…" : children}
     </button>
