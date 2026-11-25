@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { DashboardCargando, RoleDashboard } from "@/components/role-dashboard";
 
-export const metadata = { title: "Panel de empresa · Reservas Turísticas" };
+export const metadata = { title: "Panel de empresa" };
 
 export default function EmpresaDashboardPage() {
   return (

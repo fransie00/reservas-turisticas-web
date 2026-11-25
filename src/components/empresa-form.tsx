@@ -37,7 +37,7 @@ export function EmpresaForm({ empresa }: { empresa: EmpresaPrivada | null }) {
           rows={4}
           maxLength={1000}
           defaultValue={v.descripcion}
-          className="rounded-md border border-zinc-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700"
+          className="rounded-md border border-cafe-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:border-cafe-700"
         />
       </div>
       <SubmitButton pending={pending}>{empresa ? "Guardar cambios" : "Crear perfil"}</SubmitButton>

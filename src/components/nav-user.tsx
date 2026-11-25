@@ -9,7 +9,7 @@ export async function NavUser() {
     return (
       <div className="flex items-center gap-4 text-sm">
         <Link href="/login" className="hover:underline">Iniciar sesión</Link>
-        <Link href="/registro" className="rounded-md bg-blue-600 px-3 py-1.5 font-medium text-white hover:bg-blue-700">
+        <Link href="/registro" className="rounded-md bg-primary px-3 py-1.5 font-medium text-white hover:bg-primary-hover">
           Registrarse
         </Link>
       </div>
@@ -20,7 +20,7 @@ export async function NavUser() {
     <div className="flex items-center gap-4 text-sm">
       <Link href="/dashboard" className="font-medium hover:underline">{user.nombre_completo}</Link>
       <form action={logout}>
-        <button type="submit" className="text-zinc-600 hover:underline dark:text-zinc-400">
+        <button type="submit" className="text-cafe-600 hover:underline dark:text-cafe-400">
           Cerrar sesión
         </button>
       </form>
