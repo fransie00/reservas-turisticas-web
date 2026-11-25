@@ -11,7 +11,7 @@ export default function AdminDashboardPage() {
         descripcion="Gestiona usuarios y verifica empresas para la landing pública."
         secciones={[
           { titulo: "Usuarios", descripcion: "Activar, desactivar y asignar roles." },
-          { titulo: "Verificación de empresas", descripcion: "Aprueba empresas para que aparezcan en el catálogo." },
+          { titulo: "Verificación de empresas", descripcion: "Aprueba empresas para que aparezcan en el catálogo.", href: "/dashboard/admin/empresas" },
           { titulo: "Mi perfil", descripcion: "Revisa los datos de tu cuenta.", href: "/perfil" },
         ]}
       />

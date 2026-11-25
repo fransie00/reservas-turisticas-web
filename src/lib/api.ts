@@ -9,7 +9,7 @@ export type ApiResult<T> =
 /** Llama a la API de NestJS desde el servidor. El token nunca llega al JavaScript del navegador. */
 export async function apiFetch<T>(
   path: string,
-  options: { method?: "GET" | "POST"; body?: unknown; token?: string } = {},
+  options: { method?: "GET" | "POST" | "PUT" | "PATCH"; body?: unknown; token?: string } = {},
 ): Promise<ApiResult<T>> {
   try {
     const res = await fetch(`${API_URL}${path}`, {

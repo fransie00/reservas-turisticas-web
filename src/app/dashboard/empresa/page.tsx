@@ -10,7 +10,7 @@ export default function EmpresaDashboardPage() {
         rol="empresa"
         descripcion="Administra tu oferta turística y responde a las solicitudes de tus clientes."
         secciones={[
-          { titulo: "Perfil de la empresa", descripcion: "Datos comerciales, ubicación y categoría." },
+          { titulo: "Perfil de la empresa", descripcion: "Datos comerciales, ubicación y categoría.", href: "/dashboard/empresa/perfil" },
           { titulo: "Servicios", descripcion: "Crea y edita tus experiencias: duración, precio y estado." },
           { titulo: "Bloques horarios", descripcion: "Publica fechas, horarios y cupos disponibles." },
           { titulo: "Solicitudes de reserva", descripcion: "Acepta o rechaza las solicitudes pendientes." },
