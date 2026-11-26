@@ -31,7 +31,7 @@ async function PanelEmpresa() {
       secciones={[
         { titulo: "Perfil de la empresa", descripcion: "Datos comerciales, ubicación y categoría.", href: "/dashboard/empresa/perfil" },
         { titulo: "Lugares turísticos", descripcion: "Configura los lugares que ofreces.", href: "/dashboard/empresa/lugares" },
-        { titulo: "Servicios", descripcion: "Crea y edita tus experiencias: duración, precio y estado." },
+        { titulo: "Servicios", descripcion: "Crea y edita tus experiencias: duración, precio y estado.", href: "/dashboard/empresa/servicios" },
         { titulo: "Bloques horarios", descripcion: "Publica fechas, horarios y cupos disponibles." },
         { titulo: "Solicitudes de reserva", descripcion: "Acepta o rechaza las solicitudes pendientes." },
         { titulo: "Notificaciones", descripcion: "Avisos de nuevas solicitudes." },

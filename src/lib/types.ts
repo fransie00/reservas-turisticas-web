@@ -54,6 +54,32 @@ export interface LugarPublico extends Lugar {
   empresa: { id: number; nombre_comercial: string };
 }
 
+export type EstadoServicio = "disponible" | "pausado" | "cancelado";
+
+interface ServicioBase {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  duracion_minutos: number;
+  /** Pesos chilenos */
+  precio: number;
+  estado: EstadoServicio;
+}
+
+/** Servicio como lo ve su empresa. */
+export interface Servicio extends ServicioBase {
+  lugar: { id: number; nombre: string; activo: boolean };
+}
+
+/** Servicio como lo ve el cliente. */
+export interface ServicioPublico extends ServicioBase {
+  reservable: boolean;
+}
+
+export interface LugarDetalle extends LugarPublico {
+  servicios: ServicioPublico[];
+}
+
 /** Vista del administrador. */
 export interface EmpresaAdmin extends EmpresaPrivada {
   usuario: { id: number; nombre_completo: string; email: string; activo: boolean };

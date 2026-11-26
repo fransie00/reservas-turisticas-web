@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { DashboardCargando } from "@/components/role-dashboard";
 import { DIAS, obtenerLugar } from "@/lib/lugares";
+import { formatoDuracion, formatoPrecio } from "@/lib/formato";
 
 export const metadata = { title: "Lugar turístico" };
 
@@ -52,6 +53,27 @@ async function Detalle({ params }: { params: Promise<{ id: string }> }) {
           </ul>
         </dd>
       </dl>
+      <section aria-labelledby="servicios" className="flex flex-col gap-3">
+        <h2 id="servicios" className="text-lg font-semibold">Servicios</h2>
+        {l.servicios.length === 0 ? (
+          <p className="text-sm text-cafe-500">Este lugar aún no tiene servicios publicados.</p>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {l.servicios.map((s) => (
+              <li key={s.id} className={`rounded-lg border border-cafe-200 p-4 dark:border-cafe-800 ${s.reservable ? "" : "opacity-60"}`}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-semibold">{s.nombre}</h3>
+                  <span className="rounded bg-cafe-100 px-2 py-0.5 text-xs dark:bg-cafe-800">
+                    {s.reservable ? "Disponible para reservar" : "No disponible"}
+                  </span>
+                </div>
+                <p className="text-sm text-cafe-500">{formatoDuracion(s.duracion_minutos)} · {formatoPrecio(s.precio)} (referencial)</p>
+                <p className="mt-2 whitespace-pre-line text-sm">{s.descripcion}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </article>
   );
 }
