@@ -4,7 +4,7 @@ import { apiFetch, type ApiResult } from "./api";
 import { verifyRole } from "./dal";
 import { obtenerMiEmpresa, type Cargado } from "./empresas";
 import { getSessionToken } from "./session";
-import type { Lugar, LugarPublico } from "./types";
+import type { Lugar, LugarDetalle, LugarPublico } from "./types";
 
 export const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
@@ -43,7 +43,7 @@ export async function listarLugares(): Promise<Cargado<LugarPublico[]>> {
   return comoCargado(await apiFetch<LugarPublico[]>("/lugares"));
 }
 
-export async function obtenerLugar(id: string): Promise<Cargado<LugarPublico>> {
+export async function obtenerLugar(id: string): Promise<Cargado<LugarDetalle>> {
   if (!esId(id)) notFound();
-  return oNoEncontrado(await apiFetch<LugarPublico>(`/lugares/${id}`));
+  return oNoEncontrado(await apiFetch<LugarDetalle>(`/lugares/${id}`));
 }
