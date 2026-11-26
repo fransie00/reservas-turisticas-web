@@ -26,6 +26,7 @@ export function RegisterForm() {
           <option value="cliente">Cliente (turista)</option>
           <option value="empresa">Empresa turística</option>
         </select>
+        <p className="text-xs text-cafe-500">Las cuentas de empresa requieren la aprobación de un administrador.</p>
       </div>
       <Field id="password" label="Contraseña (mínimo 8 caracteres)" type="password" autoComplete="new-password" minLength={8} required />
       <Field id="confirmar" label="Confirmar contraseña" type="password" autoComplete="new-password" minLength={8} required />

@@ -8,10 +8,10 @@ export default function AdminDashboardPage() {
     <Suspense fallback={<DashboardCargando />}>
       <RoleDashboard
         rol="admin"
-        descripcion="Gestiona usuarios y verifica empresas para la landing pública."
+        descripcion="Gestiona usuarios y aprueba las empresas que solicitan acceso."
         secciones={[
           { titulo: "Usuarios", descripcion: "Activar, desactivar y asignar roles." },
-          { titulo: "Verificación de empresas", descripcion: "Aprueba empresas para que aparezcan en el catálogo.", href: "/dashboard/admin/empresas" },
+          { titulo: "Aprobación de empresas", descripcion: "Revisa las solicitudes y da acceso a la plataforma.", href: "/dashboard/admin/empresas" },
           { titulo: "Mi perfil", descripcion: "Revisa los datos de tu cuenta.", href: "/perfil" },
         ]}
       />

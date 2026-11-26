@@ -5,7 +5,7 @@ import { DashboardCargando } from "@/components/role-dashboard";
 import { verifyRole } from "@/lib/dal";
 import { listarTodasLasEmpresas } from "@/lib/empresas";
 
-export const metadata = { title: "Verificación de empresas" };
+export const metadata = { title: "Aprobación de empresas" };
 
 export default function EmpresasAdminPage() {
   return (
@@ -18,6 +18,7 @@ export default function EmpresasAdminPage() {
 async function ListadoAdmin() {
   await verifyRole("admin");
   const res = await listarTodasLasEmpresas();
+  const pendientes = res.ok ? res.data.filter((e) => !e.verificada).length : 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,9 +26,13 @@ async function ListadoAdmin() {
         <Link href="/dashboard/admin" className="text-sm text-accent hover:underline">
           ← Volver al panel
         </Link>
-        <h1 className="mt-2 text-2xl font-bold">Verificación de empresas</h1>
-        <p className="text-cafe-600 dark:text-cafe-400">Solo las empresas verificadas aparecen en el catálogo de los clientes.</p>
+        <h1 className="mt-2 text-2xl font-bold">Aprobación de empresas</h1>
+        <p className="text-cafe-600 dark:text-cafe-400">Solo las empresas aprobadas pueden usar la plataforma y aparecen en el catálogo.</p>
       </div>
+
+      {pendientes > 0 && (
+        <p className="text-sm font-medium">Solicitudes pendientes: {pendientes}</p>
+      )}
 
       {!res.ok ? (
         <p role="alert" className="text-sm text-red-700 dark:text-red-300">No se pudo cargar el listado: {res.error}</p>
@@ -53,10 +58,10 @@ async function ListadoAdmin() {
                 <input type="hidden" name="id" value={e.id} />
                 <input type="hidden" name="verificada" value={String(!e.verificada)} />
                 <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${e.verificada ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"}`}>
-                  {e.verificada ? "Verificada" : "Pendiente"}
+                  {e.verificada ? "Aprobada" : "Pendiente"}
                 </span>
                 <button type="submit" className="rounded-md border border-cafe-300 px-3 py-1.5 text-sm hover:border-primary dark:border-cafe-700">
-                  {e.verificada ? "Quitar verificación" : "Verificar"}
+                  {e.verificada ? "Revocar acceso" : "Aprobar"}
                 </button>
               </form>
             </li>

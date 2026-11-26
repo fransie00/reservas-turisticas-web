@@ -35,16 +35,16 @@ async function PerfilEmpresa() {
           {res.data ? (
             res.data.verificada ? (
               <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-                Empresa verificada: ya aparece en el catálogo para los clientes.
+                Empresa aprobada: tienes acceso a la plataforma y apareces en el catálogo de los clientes.
               </p>
             ) : (
               <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                Pendiente de verificación: aparecerás en el catálogo cuando un administrador te apruebe.
+                Pendiente de aprobación: tendrás acceso a la plataforma cuando un administrador te apruebe.
               </p>
             )
           ) : (
             <p className="text-cafe-600 dark:text-cafe-400">
-              Completa los datos de tu empresa. Un administrador la verificará para que aparezca en el catálogo.
+              Completa los datos de tu empresa. Un administrador los revisará para darte acceso a la plataforma.
             </p>
           )}
           <EmpresaForm empresa={res.data} />
