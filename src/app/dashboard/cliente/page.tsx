@@ -12,7 +12,7 @@ export default function ClienteDashboardPage() {
         secciones={[
           { titulo: "Lugares turísticos", descripcion: "Descubre los lugares disponibles, sus horarios y cupos.", href: "/lugares" },
           { titulo: "Empresas turísticas", descripcion: "Conoce las empresas verificadas de la plataforma.", href: "/dashboard/cliente/empresas" },
-          { titulo: "Mis reservas", descripcion: "Historial y estado: pendiente, aceptada, rechazada o cancelada." },
+          { titulo: "Mis reservas", descripcion: "Historial y estado: pendiente, aceptada, rechazada o cancelada.", href: "/dashboard/cliente/reservas" },
           { titulo: "Notificaciones", descripcion: "Avisos cuando una empresa responde a tu solicitud." },
           { titulo: "Mi perfil", descripcion: "Revisa los datos de tu cuenta.", href: "/perfil" },
         ]}
