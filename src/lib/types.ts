@@ -84,3 +84,22 @@ export interface LugarDetalle extends LugarPublico {
 export interface EmpresaAdmin extends EmpresaPrivada {
   usuario: { id: number; nombre_completo: string; email: string; activo: boolean };
 }
+
+export type EstadoReserva = "pendiente" | "aceptada" | "rechazada" | "cancelada";
+
+/** Reserva como la ve el cliente que la solicitó. */
+export interface Reserva {
+  id: number;
+  estado: EstadoReserva;
+  /** `YYYY-MM-DD` */
+  fecha: string;
+  hora_inicio: string;
+  hora_fin: string;
+  cantidad_personas: number;
+  fecha_solicitud: string;
+  /** Solo tiene valor si la reserva está rechazada. */
+  motivo_rechazo: string | null;
+  servicio: { id: number; nombre: string };
+  lugar: { id: number; nombre: string };
+  empresa: { nombre_comercial: string };
+}
