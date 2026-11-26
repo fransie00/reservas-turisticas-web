@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { BotonReservar } from "@/components/boton-reservar";
 import { DashboardCargando } from "@/components/role-dashboard";
+import { getCurrentUser } from "@/lib/dal";
 import { listarLugares } from "@/lib/lugares";
 
 export const metadata = { title: "Lugares turísticos" };
@@ -17,7 +19,7 @@ export default function LugaresPage() {
 }
 
 async function Catalogo() {
-  const res = await listarLugares();
+  const [res, user] = await Promise.all([listarLugares(), getCurrentUser()]);
   if (!res.ok) {
     return <p role="alert" className="text-sm text-red-700 dark:text-red-300">No se pudo cargar el catálogo: {res.error}</p>;
   }
@@ -28,8 +30,8 @@ async function Catalogo() {
   return (
     <ul className="grid gap-4 sm:grid-cols-2">
       {res.data.map((l) => (
-        <li key={l.id}>
-          <Link href={`/lugares/${l.id}`} className="block h-full overflow-hidden rounded-lg border border-cafe-200 hover:border-primary dark:border-cafe-800">
+        <li key={l.id} className="flex flex-col overflow-hidden rounded-lg border border-cafe-200 hover:border-primary dark:border-cafe-800">
+          <Link href={`/lugares/${l.id}`} className="block flex-1">
             {l.imagenes[0] && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={l.imagenes[0].url} alt="" className="h-40 w-full object-cover" />
@@ -40,6 +42,9 @@ async function Catalogo() {
               <p className="mt-2 line-clamp-3 text-sm text-cafe-600 dark:text-cafe-400">{l.descripcion}</p>
             </div>
           </Link>
+          <div className="px-4 pb-4 empty:hidden">
+            <BotonReservar lugarId={l.id} rol={user?.rol} />
+          </div>
         </li>
       ))}
     </ul>

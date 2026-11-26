@@ -13,3 +13,7 @@ export const formatoFecha = (fecha: string): string => fechas.format(new Date(`$
 const pesos = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP" });
 
 export const formatoPrecio = (precio: number): string => pesos.format(precio);
+
+/** Hoy (`YYYY-MM-DD`) en Chile, aunque el servidor corra en UTC. */
+export const hoyEnChile = (): string =>
+  new Intl.DateTimeFormat("sv-SE", { timeZone: "America/Santiago" }).format(new Date());

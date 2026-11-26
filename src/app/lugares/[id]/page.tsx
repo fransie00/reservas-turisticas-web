@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { BotonReservar } from "@/components/boton-reservar";
 import { DashboardCargando } from "@/components/role-dashboard";
+import { getCurrentUser } from "@/lib/dal";
 import { DIAS, obtenerLugar } from "@/lib/lugares";
 import { formatoDuracion, formatoPrecio } from "@/lib/formato";
 
@@ -23,12 +25,16 @@ async function Detalle({ params }: { params: Promise<{ id: string }> }) {
     return <p role="alert" className="text-sm text-red-700 dark:text-red-300">No se pudo cargar el lugar: {res.error}</p>;
   }
   const l = res.data;
+  const user = await getCurrentUser();
 
   return (
     <article className="mt-3 flex flex-col gap-5">
       <div>
         <h1 className="text-2xl font-bold">{l.nombre}</h1>
         <p className="text-cafe-500">Ofrecido por {l.empresa.nombre_comercial}</p>
+        <div className="mt-3 empty:hidden">
+          <BotonReservar lugarId={l.id} rol={user?.rol} />
+        </div>
       </div>
       <ul className="grid gap-3 sm:grid-cols-2">
         {l.imagenes.map((img, i) => (
