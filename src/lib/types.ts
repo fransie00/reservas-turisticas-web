@@ -103,3 +103,27 @@ export interface Reserva {
   lugar: { id: number; nombre: string };
   empresa: { nombre_comercial: string };
 }
+
+export type EstadoBloque = "disponible" | "completo" | "cerrado";
+
+interface BloqueBase {
+  id: number;
+  /** `YYYY-MM-DD` */
+  fecha: string;
+  hora_inicio: string;
+  hora_fin: string;
+  cupos_disponibles: number;
+}
+
+/** Bloque reservable, como lo ve el cliente. */
+export interface BloqueDisponible extends BloqueBase {
+  servicio_id: number;
+}
+
+/** Bloque como lo ve la empresa que lo publicó. */
+export interface Bloque extends BloqueBase {
+  cupos_totales: number;
+  estado: EstadoBloque;
+  servicio: { id: number; nombre: string };
+  lugar: { id: number; nombre: string };
+}
