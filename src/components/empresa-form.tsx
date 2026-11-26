@@ -25,7 +25,7 @@ export function EmpresaForm({ empresa }: { empresa: EmpresaPrivada | null }) {
         </p>
       )}
       <Field id="nombre_comercial" label="Nombre comercial" defaultValue={v.nombre_comercial} required />
-      <Field id="rut" label="RUT de la empresa" placeholder="76543210-3" defaultValue={v.rut} required />
+      <Field id="rut" label="RUT de la empresa" placeholder="76543210-3" defaultValue={v.rut} readOnly={empresa?.verificada} required />
       <Field id="categoria" label="Categoría" placeholder="Aventura, gastronomía, cultura…" defaultValue={v.categoria} required />
       <Field id="ciudad" label="Ciudad" defaultValue={v.ciudad} required />
       <Field id="direccion" label="Dirección (opcional)" defaultValue={v.direccion} />
