@@ -9,16 +9,22 @@ export type ApiResult<T> =
 /** Llama a la API de NestJS desde el servidor. El token nunca llega al JavaScript del navegador. */
 export async function apiFetch<T>(
   path: string,
-  options: { method?: "GET" | "POST" | "PUT" | "PATCH"; body?: unknown; token?: string } = {},
+  options: { method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; body?: unknown; token?: string } = {},
 ): Promise<ApiResult<T>> {
+  // Con FormData (subida de archivos) fetch pone el Content-Type con su boundary.
+  const esFormData = options.body instanceof FormData;
   try {
     const res = await fetch(`${API_URL}${path}`, {
       method: options.method ?? "GET",
       headers: {
-        "Content-Type": "application/json",
+        ...(esFormData ? {} : { "Content-Type": "application/json" }),
         ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
       },
-      body: options.body ? JSON.stringify(options.body) : undefined,
+      body: esFormData
+        ? (options.body as FormData)
+        : options.body
+          ? JSON.stringify(options.body)
+          : undefined,
       cache: "no-store",
     });
 

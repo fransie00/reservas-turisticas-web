@@ -30,6 +30,30 @@ export interface EmpresaPrivada extends EmpresaPublica {
   verificada: boolean;
 }
 
+export interface Horario {
+  /** 1 = lunes ... 7 = domingo */
+  dia: number;
+  apertura: string;
+  cierre: string;
+}
+
+/** Lugar turístico como lo ve su empresa. */
+export interface Lugar {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  direccion: string;
+  ciudad: string;
+  capacidad: number;
+  horarios: Horario[];
+  imagenes: { id: number; url: string }[];
+}
+
+/** Lugar turístico en el catálogo. */
+export interface LugarPublico extends Lugar {
+  empresa: { id: number; nombre_comercial: string };
+}
+
 /** Vista del administrador. */
 export interface EmpresaAdmin extends EmpresaPrivada {
   usuario: { id: number; nombre_completo: string; email: string; activo: boolean };
