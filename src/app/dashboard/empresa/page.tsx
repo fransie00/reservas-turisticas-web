@@ -30,7 +30,7 @@ async function PanelEmpresa() {
       descripcion="Administra tu oferta turística y responde a las solicitudes de tus clientes."
       secciones={[
         { titulo: "Perfil de la empresa", descripcion: "Datos comerciales, ubicación y categoría.", href: "/dashboard/empresa/perfil" },
-        { titulo: "Lugares turísticos", descripcion: "Configura los lugares que ofreces." },
+        { titulo: "Lugares turísticos", descripcion: "Configura los lugares que ofreces.", href: "/dashboard/empresa/lugares" },
         { titulo: "Servicios", descripcion: "Crea y edita tus experiencias: duración, precio y estado." },
         { titulo: "Bloques horarios", descripcion: "Publica fechas, horarios y cupos disponibles." },
         { titulo: "Solicitudes de reserva", descripcion: "Acepta o rechaza las solicitudes pendientes." },
