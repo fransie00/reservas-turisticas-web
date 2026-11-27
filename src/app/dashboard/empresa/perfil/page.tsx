@@ -39,12 +39,12 @@ async function PerfilEmpresa() {
               </p>
             ) : (
               <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                Pendiente de aprobación: tendrás acceso a la plataforma cuando un administrador te apruebe.
+                Solicitud pendiente: para publicar tus servicios, un administrador debe aceptarla.
               </p>
             )
           ) : (
             <p className="text-cafe-600 dark:text-cafe-400">
-              Completa los datos de tu empresa. Un administrador los revisará para darte acceso a la plataforma.
+              Para publicar tus servicios, completa los datos de tu empresa. Un administrador revisará tu solicitud y debe aceptarla.
             </p>
           )}
           <EmpresaForm empresa={res.data} />

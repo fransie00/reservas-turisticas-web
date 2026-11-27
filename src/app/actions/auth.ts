@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { DASHBOARD_POR_ROL } from "@/lib/roles";
 import { createSession, deleteSession } from "@/lib/session";
 import type { AuthResponse } from "@/lib/types";
 
@@ -32,7 +33,7 @@ export async function login(
   if (!res.ok) return { errors: res.messages, values: { email } };
 
   await createSession(res.data.access_token);
-  redirect("/dashboard");
+  redirect(DASHBOARD_POR_ROL[res.data.usuario.rol]);
 }
 
 export async function register(
@@ -64,7 +65,7 @@ export async function register(
   if (!res.ok) return { errors: res.messages, values };
 
   await createSession(res.data.access_token);
-  redirect("/dashboard");
+  redirect(DASHBOARD_POR_ROL[res.data.usuario.rol]);
 }
 
 export async function logout(): Promise<void> {
