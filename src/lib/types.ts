@@ -191,3 +191,21 @@ export interface Impacto {
     cliente: { nombre_completo: string; email: string; telefono: string | null };
   }[];
 }
+
+/** Reserva como la ve la empresa que la recibe. */
+export interface Solicitud {
+  id: number;
+  estado: EstadoReserva;
+  /** `YYYY-MM-DD` */
+  fecha: string;
+  hora_inicio: string;
+  hora_fin: string;
+  cantidad_personas: number;
+  notas: string | null;
+  fecha_solicitud: string;
+  motivo_rechazo: string | null;
+  motivo_cancelacion: string | null;
+  cliente: { nombre_completo: string; rut: string; email: string; telefono: string | null };
+  servicio: { id: number; nombre: string };
+  lugar: { id: number; nombre: string };
+}
