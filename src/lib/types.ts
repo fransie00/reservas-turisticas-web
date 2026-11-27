@@ -84,6 +84,11 @@ export interface EmpresaAdmin extends EmpresaPrivada {
 
 export type EstadoReserva = "pendiente" | "aceptada" | "rechazada" | "cancelada";
 
+export interface Acompanante {
+  nombre_completo: string;
+  rut: string;
+}
+
 /** Reserva como la ve el cliente que la solicitó. */
 export interface Reserva {
   id: number;
@@ -93,6 +98,7 @@ export interface Reserva {
   hora_inicio: string;
   hora_fin: string;
   cantidad_personas: number;
+  acompanantes: Acompanante[];
   fecha_solicitud: string;
   /** Solo tiene valor si la reserva está rechazada. */
   motivo_rechazo: string | null;
@@ -201,6 +207,7 @@ export interface Solicitud {
   hora_inicio: string;
   hora_fin: string;
   cantidad_personas: number;
+  acompanantes: Acompanante[];
   notas: string | null;
   fecha_solicitud: string;
   motivo_rechazo: string | null;
