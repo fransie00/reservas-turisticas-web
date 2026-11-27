@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { AccionesSolicitud } from "@/components/acciones-solicitud";
 import { EstadoReservaBadge } from "@/components/estado-reserva";
+import { ListaAcompanantes } from "@/components/lista-acompanantes";
 import { DashboardCargando } from "@/components/role-dashboard";
 import { Volver } from "@/components/volver";
 import { formatoFecha } from "@/lib/formato";
@@ -79,6 +80,7 @@ function Tarjeta({ solicitud: s }: { solicitud: Solicitud }) {
           </div>
         ))}
       </dl>
+      <ListaAcompanantes acompanantes={s.acompanantes} />
       {s.notas && (
         <p className="mt-3 whitespace-pre-line text-sm"><span className="text-cafe-500">Notas del cliente: </span>{s.notas}</p>
       )}

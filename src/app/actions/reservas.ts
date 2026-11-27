@@ -54,6 +54,12 @@ export async function crearReserva(
   const bloque = Number(formData.get("bloque_id"));
   if (!bloque || !Number.isInteger(lugarId)) return { errors: ["Selecciona una fecha y un horario"] };
 
+  const ruts = formData.getAll("acompanante_rut");
+  const acompanantes = formData.getAll("acompanante_nombre").map((nombre, i) => ({
+    nombre_completo: String(nombre).trim(),
+    rut: String(ruts[i] ?? "").trim(),
+  }));
+
   const res = await apiFetch<Reserva>("/reservas", {
     method: "POST",
     token,
@@ -61,6 +67,7 @@ export async function crearReserva(
       bloque_id: bloque,
       cantidad_personas: Number(formData.get("cantidad_personas")),
       notas: String(formData.get("notas") ?? "").trim() || undefined,
+      acompanantes,
     },
   });
   if (!res.ok) {

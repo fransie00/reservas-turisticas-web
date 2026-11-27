@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { EstadoReservaBadge } from "@/components/estado-reserva";
+import { ListaAcompanantes } from "@/components/lista-acompanantes";
 import { DashboardCargando } from "@/components/role-dashboard";
 import { Volver } from "@/components/volver";
 import { verifyRole } from "@/lib/dal";
@@ -65,6 +66,7 @@ async function MisReservas() {
                   <dd>{r.cantidad_personas}</dd>
                 </div>
               </dl>
+              <ListaAcompanantes acompanantes={r.acompanantes} />
               {r.estado === "cancelada" && r.motivo_cancelacion && (
                 <div className="mt-3 rounded-md border-2 border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
                   <p className="font-semibold">{r.empresa.nombre_comercial} canceló esta reserva</p>

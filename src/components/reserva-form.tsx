@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState, useState, useTransition } from "react";
+import { startTransition, useActionState, useState, useTransition, type ComponentProps } from "react";
 import { cargarMes, crearReserva, type Disponibilidad, type ReservaState } from "@/app/actions/reservas";
 import { formatoDuracion, formatoFecha, formatoPrecio } from "@/lib/formato";
-import type { Reserva, ServicioPublico } from "@/lib/types";
+import { esRutValido } from "@/lib/rut";
+import type { Acompanante, Reserva, ServicioPublico } from "@/lib/types";
 import { Calendario } from "./calendario";
 import { Field, FormErrors } from "./form-ui";
 
@@ -41,6 +42,9 @@ export function ReservaForm({
   const [fecha, setFecha] = useState<string>();
   const [bloqueId, setBloqueId] = useState<number>();
   const [personas, setPersonas] = useState("1");
+  // Al bajar la cantidad no se borra lo escrito: solo se muestran y envían los que correspondan.
+  const [acompanantes, setAcompanantes] = useState<Acompanante[]>([]);
+  const [intentado, setIntentado] = useState(false);
 
   const delServicio = vista.bloques.filter((b) => b.servicio_id === servicioId);
   // Si ni el primer mes disponible trae bloques, no hay nada publicado.
@@ -65,6 +69,35 @@ export function ReservaForm({
   const alcanzan = !elegido || cantidad <= elegido.cupos_disponibles;
   const valido = elegido !== undefined && cantidadValida && alcanzan;
 
+  // Se limita a los cupos para no dibujar miles de bloques si se escribe un número enorme.
+  const maximo = elegido?.cupos_disponibles ?? Math.max(1, ...vista.bloques.map((b) => b.cupos_disponibles));
+  const bloquesAcompanantes = Array.from(
+    { length: cantidadValida ? Math.min(cantidad, maximo) - 1 : 0 },
+    (_, i) => acompanantes[i] ?? { nombre_completo: "", rut: "" },
+  );
+  const erroresAcompanantes = bloquesAcompanantes.map((a) => ({
+    nombre_completo: a.nombre_completo.trim() ? undefined : "Ingresa el nombre completo.",
+    rut: !a.rut.trim()
+      ? "Ingresa el RUT."
+      : esRutValido(a.rut)
+        ? undefined
+        : "El RUT no es válido. Ejemplo: 12345678-5.",
+  }));
+  const resumenErrores = erroresAcompanantes.flatMap((e, i) =>
+    [e.nombre_completo, e.rut].filter(Boolean).map((m) => `Acompañante ${i + 1}: ${m}`),
+  );
+
+  function cambiarAcompanante(indice: number, cambio: Partial<Acompanante>) {
+    setAcompanantes((previos) => {
+      const nuevos = Array.from(
+        { length: Math.max(previos.length, indice + 1) },
+        (_, i) => previos[i] ?? { nombre_completo: "", rut: "" },
+      );
+      nuevos[indice] = { ...nuevos[indice], ...cambio };
+      return nuevos;
+    });
+  }
+
   const aviso = !servicioId
     ? "Elige un servicio."
     : !fecha
@@ -81,6 +114,8 @@ export function ReservaForm({
   function enviar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!valido || pending) return;
+    setIntentado(true);
+    if (resumenErrores.length > 0) return;
     const datos = new FormData(e.currentTarget);
     startTransition(() => action(datos));
   }
@@ -167,12 +202,36 @@ export function ReservaForm({
           <div className="max-w-40">
             <Field id="cantidad_personas" label="Personas" type="number" min={1} max={elegido?.cupos_disponibles} step={1} value={personas} onChange={(e) => setPersonas(e.target.value)} required />
           </div>
+          {bloquesAcompanantes.map((a, i) => (
+            <fieldset key={i} className="flex flex-col gap-3 rounded-lg border border-cafe-300 p-3 dark:border-cafe-700">
+              <legend className="px-1 text-sm font-semibold">Acompañante {i + 1}</legend>
+              <CampoAcompanante
+                id={`acompanante_nombre_${i}`}
+                name="acompanante_nombre"
+                label="Nombre completo"
+                maxLength={150}
+                value={a.nombre_completo}
+                onChange={(e) => cambiarAcompanante(i, { nombre_completo: e.target.value })}
+                error={intentado ? erroresAcompanantes[i].nombre_completo : undefined}
+              />
+              <CampoAcompanante
+                id={`acompanante_rut_${i}`}
+                name="acompanante_rut"
+                label="RUT"
+                placeholder="12345678-5"
+                maxLength={12}
+                value={a.rut}
+                onChange={(e) => cambiarAcompanante(i, { rut: e.target.value })}
+                error={intentado ? erroresAcompanantes[i].rut : undefined}
+              />
+            </fieldset>
+          ))}
           <div className="flex flex-col gap-1">
             <label htmlFor="notas" className="text-sm font-medium">Notas para la empresa (opcional)</label>
             <textarea id="notas" name="notas" rows={3} maxLength={500} className={control} />
           </div>
 
-          <FormErrors errors={state?.errors} />
+          <FormErrors errors={intentado && resumenErrores.length > 0 ? resumenErrores : state?.errors} />
           <div className="flex flex-col gap-2">
             <button
               type="submit"
@@ -187,6 +246,21 @@ export function ReservaForm({
         </>
       )}
     </form>
+  );
+}
+
+/** Sin `required` nativo: así el envío muestra nuestros mensajes, que dicen qué corregir. */
+function CampoAcompanante({ error, ...props }: ComponentProps<typeof Field> & { error?: string }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <Field
+        {...props}
+        aria-required="true"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${props.id}-error` : undefined}
+      />
+      {error && <p id={`${props.id}-error`} className="text-sm text-red-700 dark:text-red-300">{error}</p>}
+    </div>
   );
 }
 
