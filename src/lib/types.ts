@@ -41,16 +41,6 @@ export interface Lugar {
   imagenes: { id: number; url: string }[];
 }
 
-/** Lugar turístico en el catálogo. */
-export interface LugarPublico extends Lugar {
-  empresa: { id: number; nombre_comercial: string };
-}
-
-export interface LugarCatalogo extends LugarPublico {
-  /** `YYYY-MM-DD`, o null si no hay nada publicado. */
-  proxima_fecha: string | null;
-}
-
 export type EstadoServicio = "disponible" | "pausado" | "cancelado";
 
 interface ServicioBase {
@@ -68,12 +58,19 @@ export interface Servicio extends ServicioBase {
   lugar: { id: number; nombre: string; activo: boolean };
 }
 
-/** Servicio como lo ve el cliente. */
-export interface ServicioPublico extends ServicioBase {
-  reservable: boolean;
+/** Servicio como lo ve el cliente: solo llegan los activos. */
+export interface ServicioPublico extends Omit<ServicioBase, "estado"> {
+  /** Días (1 = lunes) y horas de las próximas salidas con cupos. */
+  horario: SalidasDia[];
 }
 
-export interface LugarDetalle extends LugarPublico {
+/** Lugar turístico como lo ve el cliente. */
+export interface LugarDetalle extends Lugar {
+  empresa: {
+    id: number;
+    nombre_comercial: string;
+    contacto: { email: string; telefono: string | null };
+  };
   servicios: ServicioPublico[];
 }
 

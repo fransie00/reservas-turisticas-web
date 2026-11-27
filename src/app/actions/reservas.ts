@@ -26,8 +26,9 @@ export type DatosReserva =
 export async function cargarReserva(lugarId: number): Promise<DatosReserva> {
   if (!Number.isInteger(lugarId) || lugarId < 1) return { ok: false, error: "Lugar no válido" };
 
+  const token = await getSessionToken();
   const [lugar, disponibilidad] = await Promise.all([
-    apiFetch<LugarDetalle>(`/lugares/${lugarId}`),
+    apiFetch<LugarDetalle>(`/lugares/${lugarId}`, { token }),
     listarDisponibilidad(lugarId),
   ]);
   if (!lugar.ok) return { ok: false, error: lugar.messages[0] };

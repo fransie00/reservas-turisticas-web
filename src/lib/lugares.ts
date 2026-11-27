@@ -4,7 +4,7 @@ import { apiFetch, type ApiResult } from "./api";
 import { verifyRole } from "./dal";
 import { obtenerMiEmpresa, type Cargado } from "./empresas";
 import { getSessionToken } from "./session";
-import type { Lugar, LugarDetalle, LugarCatalogo } from "./types";
+import type { Lugar, LugarDetalle } from "./types";
 
 
 /** Para las páginas de gestión: rol `empresa` y aprobada; si no, vuelve a una vista autorizada. */
@@ -38,11 +38,18 @@ export async function obtenerMiLugar(id: string): Promise<Cargado<Lugar>> {
   );
 }
 
-export async function listarLugares(): Promise<Cargado<LugarCatalogo[]>> {
-  return comoCargado(await apiFetch<LugarCatalogo[]>("/lugares"));
+/** Catálogo: sin sesión va al login; otro rol, a su propio panel. */
+export async function listarLugares(): Promise<Cargado<LugarDetalle[]>> {
+  await verifyRole("cliente");
+  return comoCargado(
+    await apiFetch<LugarDetalle[]>("/lugares", { token: await getSessionToken() }),
+  );
 }
 
 export async function obtenerLugar(id: string): Promise<Cargado<LugarDetalle>> {
+  await verifyRole("cliente");
   if (!esId(id)) notFound();
-  return oNoEncontrado(await apiFetch<LugarDetalle>(`/lugares/${id}`));
+  return oNoEncontrado(
+    await apiFetch<LugarDetalle>(`/lugares/${id}`, { token: await getSessionToken() }),
+  );
 }

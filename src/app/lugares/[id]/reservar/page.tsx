@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ReservaForm } from "@/components/reserva-form";
 import { DashboardCargando } from "@/components/role-dashboard";
-import { getCurrentUser } from "@/lib/dal";
 import { listarDisponibilidad } from "@/lib/disponibilidad";
 import { hoyEnChile } from "@/lib/formato";
 import { obtenerLugar } from "@/lib/lugares";
@@ -22,29 +21,13 @@ export default function ReservarPage({ params }: PageProps<"/lugares/[id]/reserv
 const error = "text-sm text-red-700 dark:text-red-300";
 
 async function Reservar({ params }: { params: Promise<{ id: string }> }) {
-  const user = await getCurrentUser();
   const res = await obtenerLugar((await params).id);
   if (!res.ok) return <p role="alert" className={error}>No se pudo cargar el lugar: {res.error}</p>;
   const l = res.data;
   const volver = <Link href={`/lugares/${l.id}`} className="text-sm text-accent hover:underline">← Volver al lugar</Link>;
 
-  if (user?.rol !== "cliente") {
-    return (
-      <div className="flex flex-col items-start gap-3">
-        {volver}
-        <h1 className="text-2xl font-bold">Reservar {l.nombre}</h1>
-        <p>
-          {user
-            ? "Solo las cuentas de tipo Cliente pueden reservar."
-            : "Para reservar debes iniciar sesión con una cuenta de tipo Cliente."}
-        </p>
-        {!user && <Link href="/login" className="font-medium text-accent hover:underline">Iniciar sesión</Link>}
-      </div>
-    );
-  }
-
   const disponibilidad = await listarDisponibilidad(l.id);
-  const servicios = l.servicios.filter((s) => s.reservable);
+  const { servicios } = l;
 
   return (
     <div className="flex flex-col gap-5">

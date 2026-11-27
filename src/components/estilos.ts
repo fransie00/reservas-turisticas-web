@@ -6,3 +6,5 @@ export const atajo = "text-sm text-accent hover:underline disabled:opacity-50";
 export const boton =
   "rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60";
 export const tarjeta = "rounded-xl border border-cafe-200 p-4 dark:border-cafe-800";
+
+export const BOTON_RESERVAR = "inline-block rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary-hover";
