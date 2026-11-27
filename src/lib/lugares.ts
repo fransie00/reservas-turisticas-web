@@ -4,9 +4,8 @@ import { apiFetch, type ApiResult } from "./api";
 import { verifyRole } from "./dal";
 import { obtenerMiEmpresa, type Cargado } from "./empresas";
 import { getSessionToken } from "./session";
-import type { Lugar, LugarDetalle, LugarPublico } from "./types";
+import type { Lugar, LugarDetalle, LugarCatalogo } from "./types";
 
-export const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
 /** Para las páginas de gestión: rol `empresa` y aprobada; si no, vuelve a una vista autorizada. */
 export async function verificarEmpresaAprobada(): Promise<void> {
@@ -39,8 +38,8 @@ export async function obtenerMiLugar(id: string): Promise<Cargado<Lugar>> {
   );
 }
 
-export async function listarLugares(): Promise<Cargado<LugarPublico[]>> {
-  return comoCargado(await apiFetch<LugarPublico[]>("/lugares"));
+export async function listarLugares(): Promise<Cargado<LugarCatalogo[]>> {
+  return comoCargado(await apiFetch<LugarCatalogo[]>("/lugares"));
 }
 
 export async function obtenerLugar(id: string): Promise<Cargado<LugarDetalle>> {

@@ -38,13 +38,6 @@ export async function guardarLugar(
     cuerpo.set(campo, String(formData.get(campo) ?? "").trim());
   }
 
-  const horarios = formData.getAll("dias").map((dia) => ({
-    dia: Number(dia),
-    apertura: String(formData.get(`apertura_${dia}`) ?? ""),
-    cierre: String(formData.get(`cierre_${dia}`) ?? ""),
-  }));
-  cuerpo.set("horarios", JSON.stringify(horarios));
-
   // Un input de archivos vacío igual envía un archivo de tamaño 0.
   for (const archivo of formData.getAll("imagenes")) {
     if (archivo instanceof File && archivo.size > 0) cuerpo.append("imagenes", archivo);

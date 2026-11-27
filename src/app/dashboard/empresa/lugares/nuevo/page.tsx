@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { LugarForm } from "@/components/lugar-form";
 import { DashboardCargando } from "@/components/role-dashboard";
-import { DIAS, verificarEmpresaAprobada } from "@/lib/lugares";
+import { verificarEmpresaAprobada } from "@/lib/lugares";
 
 export const metadata = { title: "Nuevo lugar turístico" };
 
@@ -19,7 +19,7 @@ async function NuevoLugar() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Nuevo lugar turístico</h1>
-      <LugarForm dias={DIAS} />
+      <LugarForm />
     </div>
   );
 }

@@ -12,8 +12,7 @@ const MAX_BYTES = 5 * 1024 * 1024;
 const control =
   "rounded-md border border-cafe-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:border-cafe-700";
 
-/** `dias` llega del servidor para no duplicar la lista. */
-export function LugarForm({ lugar, dias }: { lugar?: Lugar; dias: string[] }) {
+export function LugarForm({ lugar }: { lugar?: Lugar }) {
   const [state, action, pending] = useActionState(
     guardarLugar.bind(null, lugar?.id ?? null),
     undefined,
@@ -49,13 +48,6 @@ export function LugarForm({ lugar, dias }: { lugar?: Lugar; dias: string[] }) {
       <Field id="ciudad" label="Ciudad" defaultValue={lugar?.ciudad} maxLength={80} required />
       <Field id="capacidad" label="Capacidad (cupos)" type="number" min={1} max={10000} defaultValue={lugar?.capacidad} required />
 
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm font-medium">Horarios de atención (marca al menos un día)</legend>
-        {dias.map((nombre, i) => (
-          <FilaHorario key={nombre} dia={i + 1} nombre={nombre} horario={lugar?.horarios.find((h) => h.dia === i + 1)} />
-        ))}
-      </fieldset>
-
       {lugar && lugar.imagenes.length > 0 && (
         <fieldset>
           <legend className="mb-2 text-sm font-medium">Imágenes actuales</legend>
@@ -86,21 +78,5 @@ export function LugarForm({ lugar, dias }: { lugar?: Lugar; dias: string[] }) {
         <Link href="/dashboard/empresa/lugares" className="text-sm hover:underline">Cancelar</Link>
       </div>
     </form>
-  );
-}
-
-function FilaHorario({ dia, nombre, horario }: { dia: number; nombre: string; horario?: { apertura: string; cierre: string } }) {
-  const [abierto, setAbierto] = useState(horario !== undefined);
-
-  return (
-    <div className="flex flex-wrap items-center gap-3 text-sm">
-      <label className="flex w-28 items-center gap-2">
-        <input type="checkbox" name="dias" value={dia} checked={abierto} onChange={(e) => setAbierto(e.target.checked)} />
-        {nombre}
-      </label>
-      <input type="time" name={`apertura_${dia}`} aria-label={`Apertura ${nombre}`} defaultValue={horario?.apertura ?? "09:00"} disabled={!abierto} required={abierto} className={`${control} disabled:opacity-40`} />
-      <span>a</span>
-      <input type="time" name={`cierre_${dia}`} aria-label={`Cierre ${nombre}`} defaultValue={horario?.cierre ?? "18:00"} disabled={!abierto} required={abierto} className={`${control} disabled:opacity-40`} />
-    </div>
   );
 }

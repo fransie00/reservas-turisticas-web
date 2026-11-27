@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import { DashboardCargando } from "@/components/role-dashboard";
+import { Volver } from "@/components/volver";
 import { verifyRole } from "@/lib/dal";
 import { listarEmpresasVerificadas } from "@/lib/empresas";
 
@@ -21,9 +21,7 @@ async function ListadoEmpresas() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link href="/dashboard/cliente" className="text-sm text-accent hover:underline">
-          ← Volver al panel
-        </Link>
+        <Volver href="/lugares">Volver al catálogo</Volver>
         <h1 className="mt-2 text-2xl font-bold">Empresas turísticas</h1>
         <p className="text-cafe-600 dark:text-cafe-400">Empresas verificadas disponibles en la plataforma.</p>
       </div>

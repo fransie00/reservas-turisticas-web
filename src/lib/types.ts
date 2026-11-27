@@ -30,13 +30,6 @@ export interface EmpresaPrivada extends EmpresaPublica {
   verificada: boolean;
 }
 
-export interface Horario {
-  /** 1 = lunes ... 7 = domingo */
-  dia: number;
-  apertura: string;
-  cierre: string;
-}
-
 /** Lugar turístico como lo ve su empresa. */
 export interface Lugar {
   id: number;
@@ -45,13 +38,17 @@ export interface Lugar {
   direccion: string;
   ciudad: string;
   capacidad: number;
-  horarios: Horario[];
   imagenes: { id: number; url: string }[];
 }
 
 /** Lugar turístico en el catálogo. */
 export interface LugarPublico extends Lugar {
   empresa: { id: number; nombre_comercial: string };
+}
+
+export interface LugarCatalogo extends LugarPublico {
+  /** `YYYY-MM-DD`, o null si no hay nada publicado. */
+  proxima_fecha: string | null;
 }
 
 export type EstadoServicio = "disponible" | "pausado" | "cancelado";
@@ -99,9 +96,11 @@ export interface Reserva {
   fecha_solicitud: string;
   /** Solo tiene valor si la reserva está rechazada. */
   motivo_rechazo: string | null;
+  /** Solo tiene valor si la reserva está cancelada. */
+  motivo_cancelacion: string | null;
   servicio: { id: number; nombre: string };
   lugar: { id: number; nombre: string };
-  empresa: { nombre_comercial: string };
+  empresa: { nombre_comercial: string; contacto: { email: string; telefono: string | null } | null };
 }
 
 export type EstadoBloque = "disponible" | "completo" | "cerrado";
@@ -126,4 +125,69 @@ export interface Bloque extends BloqueBase {
   estado: EstadoBloque;
   servicio: { id: number; nombre: string };
   lugar: { id: number; nombre: string };
+}
+
+export interface BloquesDelMes<T> {
+  /** `YYYY-MM` */
+  mes: string;
+  bloques: T[];
+}
+
+export interface SalidasDia {
+  /** 1 = lunes ... 7 = domingo */
+  dia: number;
+  horas: string[];
+}
+
+/** Patrón reutilizable: solo días y horas de salida. */
+export interface Horario {
+  id: number;
+  nombre: string;
+  salidas: SalidasDia[];
+  servicios: { id: number; nombre: string }[];
+  aplicaciones: { servicio: { id: number; nombre: string }; desde: string; hasta: string; cupos: number }[];
+}
+
+export interface PedidoAplicacion {
+  servicio_id: number;
+  desde: string;
+  hasta: string;
+  cupos: number;
+}
+
+export interface ResultadoServicio {
+  servicio_id: number;
+  error?: string;
+  bloques: number;
+  omitidos_existentes: number;
+  omitidos_pasados: number;
+  otras_salidas: number;
+}
+
+export interface ResumenServicio {
+  id: number;
+  nombre: string;
+  lugar: { id: number; nombre: string; capacidad: number };
+  duracion_minutos: number;
+  horarios: { id: number; nombre: string }[];
+  cupos: number | null;
+  /** `YYYY-MM-DD` */
+  hasta: string | null;
+  proximos: number;
+}
+
+/** Qué pasaría al eliminar un horario. */
+export interface Impacto {
+  nombre: string;
+  salidas_a_eliminar: number;
+  salidas_a_anular: number;
+  reservas: {
+    id: number;
+    estado: "pendiente" | "aceptada";
+    fecha: string;
+    hora_inicio: string;
+    servicio: string;
+    cantidad_personas: number;
+    cliente: { nombre_completo: string; email: string; telefono: string | null };
+  }[];
 }

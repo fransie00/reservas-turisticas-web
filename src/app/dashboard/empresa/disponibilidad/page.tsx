@@ -1,89 +1,75 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { BloqueForm, BotonEstadoBloque } from "@/components/bloque-form";
+import { EncabezadoDisponibilidad } from "@/components/encabezado-disponibilidad";
+import { tarjeta } from "@/components/estilos";
 import { DashboardCargando } from "@/components/role-dashboard";
-import { listarMisBloques } from "@/lib/disponibilidad";
-import { formatoFecha, hoyEnChile } from "@/lib/formato";
-import { DIAS, listarMisLugares, verificarEmpresaAprobada } from "@/lib/lugares";
-import { listarMisServicios } from "@/lib/servicios";
+import { formatoDuracion, formatoFecha, hoyEnChile } from "@/lib/formato";
+import { resumirServicios } from "@/lib/horarios";
+import { verificarEmpresaAprobada } from "@/lib/lugares";
+import type { ResumenServicio } from "@/lib/types";
 
-export const metadata = { title: "Bloques horarios" };
+export const metadata = { title: "Disponibilidad" };
 
-export default function DisponibilidadPage() {
+const DIAS_AVISO = 14;
+
+export default function ResumenPage() {
   return (
     <Suspense fallback={<DashboardCargando />}>
-      <Disponibilidad />
+      <Resumen />
     </Suspense>
   );
 }
 
-const ESTADOS = { disponible: "Disponible", completo: "Completo", cerrado: "Cerrado" };
-const error = "text-sm text-red-700 dark:text-red-300";
+/** Texto y símbolo, para no depender solo del color. */
+function estado(s: ResumenServicio, hoy: string) {
+  if (!s.hasta) return { texto: "⚠ Sin horarios", clases: "bg-red-100 text-red-900 dark:bg-red-950 dark:text-red-300" };
+  const quedan = Math.round((Date.parse(s.hasta) - Date.parse(hoy)) / 86_400_000);
+  return quedan <= DIAS_AVISO
+    ? { texto: quedan === 0 ? "⚠ Vence hoy" : `⚠ Vence en ${quedan} ${quedan === 1 ? "día" : "días"}`, clases: "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300" }
+    : { texto: "✓ Al día", clases: "bg-green-100 text-green-900 dark:bg-green-950 dark:text-green-300" };
+}
 
-async function Disponibilidad() {
+async function Resumen() {
   await verificarEmpresaAprobada();
-  const [bloques, servicios, lugares] = await Promise.all([
-    listarMisBloques(),
-    listarMisServicios(),
-    listarMisLugares(),
-  ]);
-
-  const opciones =
-    servicios.ok && lugares.ok
-      ? servicios.data
-          .filter((s) => s.lugar.activo && s.estado !== "cancelado")
-          .map((s) => ({
-            id: s.id,
-            nombre: `${s.nombre} (${s.lugar.nombre})`,
-            horario:
-              lugares.data
-                .find((l) => l.id === s.lugar.id)
-                ?.horarios.map((h) => `${DIAS[h.dia - 1]} ${h.apertura}–${h.cierre}`)
-                .join(", ") ?? "",
-          }))
-      : [];
+  const res = await resumirServicios();
+  const hoy = hoyEnChile();
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <Link href="/dashboard/empresa" className="text-sm text-accent hover:underline">← Volver al panel</Link>
-        <h1 className="mt-2 text-2xl font-bold">Bloques horarios</h1>
-        <p className="text-cafe-600 dark:text-cafe-400">Publica las fechas, horarios y cupos que tus clientes pueden reservar.</p>
-      </div>
-
-      {!servicios.ok || !lugares.ok ? (
-        <p role="alert" className={error}>No se pudieron cargar tus servicios. Inténtalo más tarde.</p>
-      ) : opciones.length === 0 ? (
+    <div className="flex flex-col gap-4">
+      <EncabezadoDisponibilidad activa="resumen" />
+      {!res.ok ? (
+        <p role="alert" className="text-sm text-red-700 dark:text-red-300">No se pudo cargar el resumen: {res.error}</p>
+      ) : res.data.length === 0 ? (
         <p className="text-cafe-500">
           Primero <Link href="/dashboard/empresa/servicios/nuevo" className="text-accent hover:underline">crea un servicio</Link>.
         </p>
       ) : (
-        <BloqueForm hoy={hoyEnChile()} servicios={opciones} />
-      )}
-
-      <section aria-labelledby="publicados" className="flex flex-col gap-3">
-        <h2 id="publicados" className="text-lg font-semibold">Próximos bloques</h2>
-        {!bloques.ok ? (
-          <p role="alert" className={error}>No se pudo cargar el listado: {bloques.error}</p>
-        ) : bloques.data.length === 0 ? (
-          <p className="text-sm text-cafe-500">Aún no has publicado bloques.</p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {bloques.data.map((b) => (
-              <li key={b.id} className="flex flex-wrap items-center gap-4 rounded-lg border border-cafe-200 p-4 dark:border-cafe-800">
-                <div className="min-w-48 flex-1">
-                  <p className="font-semibold">{formatoFecha(b.fecha)} · {b.hora_inicio} a {b.hora_fin}</p>
-                  <p className="text-sm text-cafe-500">{b.servicio.nombre} · {b.lugar.nombre}</p>
-                  <p className="text-sm">{ESTADOS[b.estado]} · {b.cupos_disponibles} de {b.cupos_totales} cupos libres</p>
+        <ul className="flex flex-col gap-3">
+          {res.data.map((s) => {
+            const e = estado(s, hoy);
+            return (
+              <li key={s.id} className={tarjeta}>
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <h2 className="font-semibold">{s.nombre}</h2>
+                    <p className="text-sm text-cafe-500">{s.lugar.nombre} · {formatoDuracion(s.duracion_minutos)}</p>
+                  </div>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${e.clases}`}>{e.texto}</span>
                 </div>
-                {b.estado !== "completo" && (
-                  <BotonEstadoBloque id={b.id} cerrado={b.estado === "cerrado"} nombre={`${b.fecha} ${b.hora_inicio}`} />
-                )}
+                <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                  <div><dt className="text-cafe-500">Horario</dt><dd>{s.horarios.map((h) => h.nombre).join(", ") || (s.proximos ? "Bloques sueltos" : "—")}</dd></div>
+                  <div><dt className="text-cafe-500">Cupos</dt><dd>{s.cupos ?? "—"}</dd></div>
+                  <div><dt className="text-cafe-500">Vigente hasta</dt><dd>{s.hasta ? formatoFecha(s.hasta) : "—"}</dd></div>
+                  <div><dt className="text-cafe-500">Salidas próximas</dt><dd>{s.proximos}</dd></div>
+                </dl>
+                <Link href={`/dashboard/empresa/disponibilidad/horarios?servicio=${s.id}`} className="mt-3 inline-block text-sm text-accent hover:underline">
+                  Ver sus horarios
+                </Link>
               </li>
-            ))}
-          </ul>
-        )}
-      </section>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }

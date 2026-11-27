@@ -36,6 +36,7 @@
   --color-accent-soft-fg: var(--accent-soft-fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces), Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {

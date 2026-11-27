@@ -5,7 +5,7 @@ import { DashboardCargando } from "@/components/role-dashboard";
 import { getCurrentUser } from "@/lib/dal";
 import { listarDisponibilidad } from "@/lib/disponibilidad";
 import { hoyEnChile } from "@/lib/formato";
-import { DIAS, obtenerLugar } from "@/lib/lugares";
+import { obtenerLugar } from "@/lib/lugares";
 
 export const metadata = { title: "Reservar" };
 
@@ -53,16 +53,6 @@ async function Reservar({ params }: { params: Promise<{ id: string }> }) {
         <h1 className="mt-2 text-2xl font-bold">Reservar {l.nombre}</h1>
         <p className="text-cafe-500">Ofrecido por {l.empresa.nombre_comercial}</p>
       </div>
-      <section aria-labelledby="horario" className="rounded-lg border border-cafe-200 p-4 text-sm dark:border-cafe-800">
-        <h2 id="horario" className="mb-1 font-semibold">Horario general de atención</h2>
-        <ul>
-          {l.horarios.map((h) => (
-            <li key={h.dia}>{DIAS[h.dia - 1]}: {h.apertura} a {h.cierre}</li>
-          ))}
-        </ul>
-        {l.horarios.length === 0 && <p className="text-cafe-500">La empresa aún no publica su horario.</p>}
-      </section>
-
       {!disponibilidad.ok ? (
         <p role="alert" className={error}>No se pudo cargar la disponibilidad: {disponibilidad.error}</p>
       ) : servicios.length === 0 ? (
@@ -71,9 +61,9 @@ async function Reservar({ params }: { params: Promise<{ id: string }> }) {
         <ReservaForm
           lugarId={l.id}
           hoy={hoyEnChile()}
-          diasAtencion={l.horarios.map((h) => h.dia)}
+          direccion={`${l.direccion}, ${l.ciudad}`}
           servicios={servicios}
-          bloques={disponibilidad.data}
+          disponibilidad={disponibilidad.data}
         />
       )}
     </div>

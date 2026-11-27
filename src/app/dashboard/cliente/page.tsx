@@ -1,22 +1,6 @@
-import { Suspense } from "react";
-import { DashboardCargando, RoleDashboard } from "@/components/role-dashboard";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "Panel de cliente" };
-
-export default function ClienteDashboardPage() {
-  return (
-    <Suspense fallback={<DashboardCargando />}>
-      <RoleDashboard
-        rol="cliente"
-        descripcion="Encuentra experiencias turísticas y gestiona tus reservas."
-        secciones={[
-          { titulo: "Lugares turísticos", descripcion: "Descubre los lugares disponibles, sus horarios y cupos.", href: "/lugares" },
-          { titulo: "Empresas turísticas", descripcion: "Conoce las empresas verificadas de la plataforma.", href: "/dashboard/cliente/empresas" },
-          { titulo: "Mis reservas", descripcion: "Historial y estado: pendiente, aceptada, rechazada o cancelada.", href: "/dashboard/cliente/reservas" },
-          { titulo: "Notificaciones", descripcion: "Avisos cuando una empresa responde a tu solicitud." },
-          { titulo: "Mi perfil", descripcion: "Revisa los datos de tu cuenta.", href: "/perfil" },
-        ]}
-      />
-    </Suspense>
-  );
+/** El cliente no tiene panel: entra directo al catálogo y navega desde la barra superior. */
+export default function ClientePage() {
+  redirect("/lugares");
 }

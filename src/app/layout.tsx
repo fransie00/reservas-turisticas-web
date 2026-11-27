@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="flex items-center justify-between border-b border-cafe-200 px-6 py-3 dark:border-cafe-800">
+        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-cafe-200 px-6 py-3 dark:border-cafe-800">
           <Link href="/" aria-label="Explora, ir al inicio"><Logo /></Link>
           <Suspense fallback={<div className="h-6 w-40" />}>
             <NavUser />
