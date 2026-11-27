@@ -32,7 +32,9 @@ async function Aplicar({ params, searchParams }: Pick<Props, "params" | "searchP
   const horario = horarios.data.find((h) => String(h.id) === id);
   if (!horario) notFound();
   const asignados = servicios.data.filter((s) => horario.servicios.some((h) => h.id === s.id));
-  const marcado = asignados.find((s) => String(s.id) === servicio)?.id;
+  const activos = asignados.filter((s) => s.estado === "disponible");
+  const pausados = asignados.filter((s) => s.estado !== "disponible");
+  const marcado = activos.find((s) => String(s.id) === servicio)?.id;
 
   return (
     <div className="flex flex-col gap-4">
@@ -49,8 +51,13 @@ async function Aplicar({ params, searchParams }: Pick<Props, "params" | "searchP
         <p className="text-cafe-500">
           Este horario no tiene servicios. <Link href={`/dashboard/empresa/disponibilidad/horarios/${horario.id}`} className="text-accent hover:underline">Edítalo y márcalos</Link>.
         </p>
-      ) : (
-        <AplicarForm key={`${horario.id}-${marcado}`} horarioId={horario.id} hoy={hoyEnChile()} servicios={asignados} marcado={marcado} />
+      ) : activos.length > 0 && (
+        <AplicarForm key={`${horario.id}-${marcado}`} horarioId={horario.id} hoy={hoyEnChile()} servicios={activos} marcado={marcado} />
+      )}
+      {pausados.length > 0 && (
+        <p className="text-sm text-cafe-500">
+          No se puede publicar en servicios pausados: {pausados.map((s) => s.nombre).join(", ")}. Actívalos en <Link href="/dashboard/empresa/servicios" className="text-accent hover:underline">Servicios</Link>.
+        </p>
       )}
     </div>
   );

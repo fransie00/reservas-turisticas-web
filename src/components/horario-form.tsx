@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { guardarHorario } from "@/app/actions/horarios";
-import type { SalidasDia } from "@/lib/types";
+import type { EstadoServicio, SalidasDia } from "@/lib/types";
 import { atajo, boton, control, ficha, tarjeta } from "./estilos";
 import { Field, FormErrors } from "./form-ui";
 
@@ -53,15 +53,19 @@ export function HorarioForm({
   id: number | null;
   nombreInicial?: string;
   grupos?: { dias: number[]; horas: string[] }[];
-  /** Todos los de la empresa. */
-  servicios: { id: number; nombre: string; lugar: { nombre: string } }[];
+  /** Todos los de la empresa. Los pausados se muestran, pero no se pueden marcar. */
+  servicios: { id: number; nombre: string; estado: EstadoServicio; lugar: { nombre: string } }[];
   asignados?: number[];
   /** Servicio desde cuya lista se llegó; se vuelve a ella. */
   filtro: number | null;
 }) {
-  const [elegidos, setElegidos] = useState(() =>
-    servicios.length === 1 ? [servicios[0].id] : asignados.filter((a) => servicios.some((s) => s.id === a)),
-  );
+  const activos = servicios.filter((s) => s.estado === "disponible");
+  const [elegidos, setElegidos] = useState(() => {
+    // Al editar se conservan los ya asignados, aunque estén pausados.
+    const marcables = id === null ? activos : servicios;
+    const previos = asignados.filter((a) => marcables.some((s) => s.id === a));
+    return !previos.length && activos.length === 1 ? [activos[0].id] : previos;
+  });
   const [nombre, setNombre] = useState(nombreInicial);
   const [grupos, setGrupos] = useState<Grupo[]>(() =>
     iniciales
@@ -102,8 +106,8 @@ export function HorarioForm({
         <div className="flex flex-wrap gap-2">
           {servicios.map((s) => (
             <label key={s.id} className={ficha}>
-              <input type="checkbox" className="sr-only" checked={elegidos.includes(s.id)} onChange={() => setElegidos(alternar(elegidos, s.id))} />
-              {s.nombre} ({s.lugar.nombre})
+              <input type="checkbox" className="sr-only" disabled={s.estado !== "disponible"} checked={elegidos.includes(s.id)} onChange={() => setElegidos(alternar(elegidos, s.id))} />
+              {s.nombre} ({s.lugar.nombre}){s.estado === "pausado" && " · pausado: actívalo en «Servicios»"}
             </label>
           ))}
         </div>
