@@ -43,7 +43,7 @@ export async function NavUser() {
             <Link href="/dashboard/empresa/lugares" className={pildora}>Lugares</Link>
             <Link href="/dashboard/empresa/servicios" className={pildora}>Servicios</Link>
             <Link href="/dashboard/empresa/disponibilidad" className={pildora}>Disponibilidad</Link>
-            <Pronto>Solicitudes</Pronto>
+            <Link href="/dashboard/empresa/solicitudes" className={pildora}>Solicitudes</Link>
           </>
         )}
       </Barra>
