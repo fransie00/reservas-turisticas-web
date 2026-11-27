@@ -2,7 +2,7 @@ import "server-only";
 import { apiFetch } from "./api";
 import type { Cargado } from "./empresas";
 import { getSessionToken } from "./session";
-import type { Horario, Impacto, ResumenServicio } from "./types";
+import type { Horario, Impacto, ResumenServicio, SalidasSueltas } from "./types";
 
 async function consultar<T>(ruta: string): Promise<Cargado<T>> {
   const res = await apiFetch<T>(ruta, { token: await getSessionToken() });
@@ -10,6 +10,7 @@ async function consultar<T>(ruta: string): Promise<Cargado<T>> {
 }
 
 export const listarHorarios = () => consultar<Horario[]>("/horarios/mios");
+export const listarSueltas = () => consultar<SalidasSueltas[]>("/horarios/sueltas");
 /** Llamar solo con el id de un horario propio ya encontrado. */
 export const verImpacto = (id: number) => consultar<Impacto>(`/horarios/${id}/impacto`);
 export const resumirServicios = () => consultar<ResumenServicio[]>("/horarios/resumen");

@@ -154,6 +154,17 @@ export interface Horario {
   aplicaciones: { servicio: { id: number; nombre: string }; desde: string; hasta: string; cupos: number }[];
 }
 
+/** Salidas publicadas de un servicio que no pertenecen a ningún horario. */
+export interface SalidasSueltas {
+  servicio: { id: number; nombre: string; estado: EstadoServicio };
+  salidas: SalidasDia[];
+  desde: string;
+  hasta: string;
+  cupos_min: number;
+  cupos_max: number;
+  total: number;
+}
+
 export interface PedidoAplicacion {
   servicio_id: number;
   desde: string;
@@ -173,6 +184,7 @@ export interface ResultadoServicio {
 export interface ResumenServicio {
   id: number;
   nombre: string;
+  estado: EstadoServicio;
   lugar: { id: number; nombre: string; capacidad: number };
   duracion_minutos: number;
   horarios: { id: number; nombre: string }[];
