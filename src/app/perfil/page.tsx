@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Volver } from "@/components/volver";
 import { verifySession } from "@/lib/dal";
 
 export const metadata = { title: "Mi perfil" };
@@ -6,7 +7,8 @@ export const metadata = { title: "Mi perfil" };
 export default function PerfilPage() {
   return (
     <main className="mx-auto w-full max-w-xl flex-1 p-6">
-      <h1 className="mb-6 text-2xl font-bold">Mi perfil</h1>
+      <Volver href="/dashboard">Volver</Volver>
+      <h1 className="mb-6 mt-3 text-2xl font-bold">Mi perfil</h1>
       {/* La sesión se lee en cada petición, por eso va detrás de Suspense */}
       <Suspense fallback={<p className="text-cafe-500">Cargando…</p>}>
         <DatosPerfil />

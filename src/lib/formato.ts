@@ -17,3 +17,22 @@ export const formatoPrecio = (precio: number): string => pesos.format(precio);
 /** Hoy (`YYYY-MM-DD`) en Chile, aunque el servidor corra en UTC. */
 export const hoyEnChile = (): string =>
   new Intl.DateTimeFormat("sv-SE", { timeZone: "America/Santiago" }).format(new Date());
+
+const meses = new Intl.DateTimeFormat("es-CL", { month: "long", year: "numeric", timeZone: "UTC" });
+
+/** "2026-12" → "diciembre de 2026" */
+export const formatoMes = (mes: string): string => meses.format(new Date(`${mes}-01T00:00:00Z`));
+
+/** "2026-12" + 1 → "2027-01" */
+export function sumarMeses(mes: string, cantidad: number): string {
+  const fecha = new Date(`${mes}-01T00:00:00Z`);
+  fecha.setUTCMonth(fecha.getUTCMonth() + cantidad);
+  return fecha.toISOString().slice(0, 7);
+}
+
+/** "2026-12" → "2026-12-31" */
+export function ultimoDia(mes: string): string {
+  const fecha = new Date(`${sumarMeses(mes, 1)}-01T00:00:00Z`);
+  fecha.setUTCDate(0);
+  return fecha.toISOString().slice(0, 10);
+}

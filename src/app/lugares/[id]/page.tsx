@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { BotonReservar } from "@/components/boton-reservar";
 import { DashboardCargando } from "@/components/role-dashboard";
 import { getCurrentUser } from "@/lib/dal";
-import { DIAS, obtenerLugar } from "@/lib/lugares";
+import { obtenerLugar } from "@/lib/lugares";
 import { formatoDuracion, formatoPrecio } from "@/lib/formato";
 
 export const metadata = { title: "Lugar turístico" };
@@ -50,14 +50,6 @@ async function Detalle({ params }: { params: Promise<{ id: string }> }) {
         <dd>{l.direccion}, {l.ciudad}</dd>
         <dt className="text-cafe-500">Capacidad</dt>
         <dd>{l.capacidad} cupos</dd>
-        <dt className="text-cafe-500">Horarios</dt>
-        <dd>
-          <ul>
-            {l.horarios.map((h) => (
-              <li key={h.dia}>{DIAS[h.dia - 1]}: {h.apertura} a {h.cierre}</li>
-            ))}
-          </ul>
-        </dd>
       </dl>
       <section aria-labelledby="servicios" className="flex flex-col gap-3">
         <h2 id="servicios" className="text-lg font-semibold">Servicios</h2>
