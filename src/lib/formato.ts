@@ -14,6 +14,10 @@ const pesos = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP
 
 export const formatoPrecio = (precio: number): string => pesos.format(precio);
 
+/** El precio es referencial: en la plataforma no se cobra. */
+export const textoValorReferencial = (precio: number): string =>
+  `Valor referencial: ${formatoPrecio(precio)} por persona, se paga el día de la visita.`;
+
 /** Hoy (`YYYY-MM-DD`) en Chile, aunque el servidor corra en UTC. */
 export const hoyEnChile = (): string =>
   new Intl.DateTimeFormat("sv-SE", { timeZone: "America/Santiago" }).format(new Date());

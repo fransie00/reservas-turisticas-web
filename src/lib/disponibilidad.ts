@@ -8,7 +8,7 @@ const consulta = (mes?: string) => (mes ? `?mes=${encodeURIComponent(mes)}` : ""
 
 /** Llamar solo con un id ya validado. Sin `mes`, llega el del primer bloque disponible. */
 export async function listarDisponibilidad(lugarId: number, mes?: string): Promise<Cargado<BloquesDelMes<BloqueDisponible>>> {
-  const res = await apiFetch<BloquesDelMes<BloqueDisponible>>(`/lugares/${lugarId}/disponibilidad${consulta(mes)}`);
+  const res = await apiFetch<BloquesDelMes<BloqueDisponible>>(`/lugares/${lugarId}/disponibilidad${consulta(mes)}`, { token: await getSessionToken() });
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: res.messages[0] };
 }
 

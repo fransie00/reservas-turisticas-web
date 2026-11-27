@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { BotonReservar } from "@/components/boton-reservar";
+import { BOTON_RESERVAR } from "@/components/estilos";
+import { ReservaModal } from "@/components/reserva-modal";
 import { DashboardCargando } from "@/components/role-dashboard";
-import { getCurrentUser } from "@/lib/dal";
+import { Contacto, ServiciosLugar } from "@/components/servicios-lugar";
 import { obtenerLugar } from "@/lib/lugares";
-import { formatoDuracion, formatoPrecio } from "@/lib/formato";
 
 export const metadata = { title: "Lugar turístico" };
 
@@ -25,16 +25,17 @@ async function Detalle({ params }: { params: Promise<{ id: string }> }) {
     return <p role="alert" className="text-sm text-red-700 dark:text-red-300">No se pudo cargar el lugar: {res.error}</p>;
   }
   const l = res.data;
-  const user = await getCurrentUser();
 
   return (
     <article className="mt-3 flex flex-col gap-5">
       <div>
         <h1 className="text-2xl font-bold">{l.nombre}</h1>
         <p className="text-cafe-500">Ofrecido por {l.empresa.nombre_comercial}</p>
-        <div className="mt-3 empty:hidden">
-          <BotonReservar lugarId={l.id} rol={user?.rol} />
-        </div>
+        {l.servicios.length > 0 && (
+          <div className="mt-3">
+            <ReservaModal lugarId={l.id} className={BOTON_RESERVAR} />
+          </div>
+        )}
       </div>
       <ul className="grid gap-3 sm:grid-cols-2">
         {l.imagenes.map((img, i) => (
@@ -50,27 +51,12 @@ async function Detalle({ params }: { params: Promise<{ id: string }> }) {
         <dd>{l.direccion}, {l.ciudad}</dd>
         <dt className="text-cafe-500">Capacidad</dt>
         <dd>{l.capacidad} cupos</dd>
+        <dt className="text-cafe-500">Contacto</dt>
+        <dd><Contacto contacto={l.empresa.contacto} /></dd>
       </dl>
       <section aria-labelledby="servicios" className="flex flex-col gap-3">
         <h2 id="servicios" className="text-lg font-semibold">Servicios</h2>
-        {l.servicios.length === 0 ? (
-          <p className="text-sm text-cafe-500">Este lugar aún no tiene servicios publicados.</p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {l.servicios.map((s) => (
-              <li key={s.id} className={`rounded-lg border border-cafe-200 p-4 dark:border-cafe-800 ${s.reservable ? "" : "opacity-60"}`}>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-semibold">{s.nombre}</h3>
-                  <span className="rounded bg-cafe-100 px-2 py-0.5 text-xs dark:bg-cafe-800">
-                    {s.reservable ? "Disponible para reservar" : "No disponible"}
-                  </span>
-                </div>
-                <p className="text-sm text-cafe-500">{formatoDuracion(s.duracion_minutos)} · {formatoPrecio(s.precio)} (referencial)</p>
-                <p className="mt-2 whitespace-pre-line text-sm">{s.descripcion}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ServiciosLugar servicios={l.servicios} detallado />
       </section>
     </article>
   );

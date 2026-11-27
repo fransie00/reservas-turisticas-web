@@ -47,7 +47,6 @@ async function MisLugares() {
               <div className="min-w-48 flex-1">
                 <p className="font-semibold">{l.nombre}</p>
                 <p className="text-sm text-cafe-500">{l.direccion}, {l.ciudad} · {l.capacidad} cupos</p>
-                <Link href={`/lugares/${l.id}`} className="text-sm text-accent hover:underline">Ver como cliente</Link>
               </div>
               <div className="flex gap-2">
                 <Link href={`/dashboard/empresa/lugares/${l.id}/editar`} className="rounded-md border border-cafe-300 px-3 py-1.5 text-sm hover:border-primary dark:border-cafe-700">

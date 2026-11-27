@@ -56,7 +56,7 @@ export function ReservaModal({ lugarId, className }: { lugarId: number; classNam
 
 function Contenido({ datos, onCerrar }: { datos: Extract<DatosReserva, { ok: true }>; onCerrar: () => void }) {
   const { lugar, disponibilidad, hoy } = datos;
-  const servicios = lugar.servicios.filter((s) => s.reservable);
+  const { servicios } = lugar;
 
   return (
     <div className="flex flex-col gap-4">

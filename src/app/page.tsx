@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { EmpresasDestacadas } from "@/components/landing-destacadas";
+import { getCurrentUser } from "@/lib/dal";
+
+/** Para un cliente con sesión, la página de inicio es el catálogo. */
+async function IrAlCatalogo() {
+  const user = await getCurrentUser();
+  if (user?.rol === "cliente") redirect("/lugares");
+  return null;
+}
 
 const pasos = [
   {
@@ -42,6 +51,9 @@ const beneficios = [
 export default function Home() {
   return (
     <>
+      <Suspense fallback={null}>
+        <IrAlCatalogo />
+      </Suspense>
       {/* Hero: foto de fondo con capas oscuras para que el texto siempre se lea */}
       <section className="relative isolate overflow-hidden">
         <Image

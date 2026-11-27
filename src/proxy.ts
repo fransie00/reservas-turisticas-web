@@ -9,7 +9,7 @@ export function proxy(request: NextRequest) {
   const tieneSesion = request.cookies.has(SESSION_COOKIE);
   const { pathname } = request.nextUrl;
 
-  const protegida = pathname.startsWith("/perfil") || pathname.startsWith("/dashboard");
+  const protegida = ["/perfil", "/dashboard", "/lugares"].some((ruta) => pathname.startsWith(ruta));
   if (protegida && !tieneSesion) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -20,5 +20,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/perfil/:path*", "/dashboard/:path*", "/login", "/registro"],
+  matcher: ["/perfil/:path*", "/dashboard/:path*", "/lugares/:path*", "/login", "/registro"],
 };
