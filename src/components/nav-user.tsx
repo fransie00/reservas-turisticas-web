@@ -36,14 +36,13 @@ export async function NavUser() {
     const aprobada = empresa.ok && empresa.data?.verificada;
     return (
       <Barra user={user}>
-        <Link href="/dashboard/empresa" className={pildora}>Inicio</Link>
-        <Link href="/dashboard/empresa/perfil" className={pildora}>Mi empresa</Link>
+        <Link href="/dashboard/empresa/perfil" className={pildora}>Perfil de Empresa</Link>
         {aprobada && (
           <>
-            <Link href="/dashboard/empresa/lugares" className={pildora}>Lugares</Link>
+            <Link href="/dashboard/empresa/lugares" className={pildora}>Lugares Turísticos</Link>
             <Link href="/dashboard/empresa/servicios" className={pildora}>Servicios</Link>
             <Link href="/dashboard/empresa/disponibilidad" className={pildora}>Disponibilidad</Link>
-            <Link href="/dashboard/empresa/solicitudes" className={pildora}>Solicitudes</Link>
+            <Link href="/dashboard/empresa/solicitudes" className={pildora}>Solicitudes de Reserva</Link>
           </>
         )}
       </Barra>
@@ -73,7 +72,7 @@ function Barra({ user, children }: { user: Usuario; children: React.ReactNode })
         </span>
         Mi perfil
       </Link>
-      <Pronto>Notificaciones</Pronto>
+      {user.rol === "cliente" && <Pronto>Notificaciones</Pronto>}
       <form action={logout}>
         <button type="submit" className="px-2 text-cafe-600 hover:underline dark:text-cafe-400">Cerrar sesión</button>
       </form>

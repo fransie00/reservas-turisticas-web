@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { apiFetch } from "./api";
-import { getSessionToken } from "./session";
+import { getSessionToken, leerToken } from "./session";
 import { DASHBOARD_POR_ROL } from "./roles";
 import type { RolNombre, Usuario } from "./types";
 
@@ -11,7 +11,9 @@ export const getCurrentUser = cache(async (): Promise<Usuario | null> => {
   const token = await getSessionToken();
   if (!token) return null;
   const res = await apiFetch<Usuario>("/auth/profile", { token });
-  return res.ok ? res.data : null;
+  // Si el rol cambió desde que se emitió el token, hay que iniciar sesión de nuevo:
+  // el proxy redirige según el token y se produciría un bucle.
+  return res.ok && res.data.rol === leerToken(token).rol ? res.data : null;
 });
 
 /** Para páginas protegidas: sin sesión válida limpia la cookie y envía al login. */
